@@ -17,7 +17,15 @@ exports.setDefaultCredentials = function setDefaultCredentials({
 };
 
 exports.basicAuth = function basicAuth(req, res, next) {
-  const myAuth = Auth(req);
+  let myAuth = null;
+
+  if (req.query.auth) {
+    myAuth = Auth.parse(`Basic ${req.query.auth}`);
+  }
+  else {
+    myAuth = Auth(req);
+  }
+  
   // If Authorize: Basic header exists and the password isn't blank
   // AND config.user.overridebasic is false, extract basic credentials
   // from client]
